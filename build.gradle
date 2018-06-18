@@ -1,0 +1,89 @@
+plugins {
+    id 'base'
+    id 'cpp'
+}
+
+model {
+    buildTypes {
+        release
+    }
+
+    flavors {
+        staticrt
+        sanitizer
+    }
+
+    toolChains {
+        //gcc(Gcc)
+        clang(Clang)
+    }
+
+    platforms {
+        x64 {
+            architecture "x86_64"
+        }
+    }
+
+    binaries {
+        all {
+            if (toolChain in VisualCpp) {
+                cppCompiler.args "/EHsc"
+                println 'all toolchain is VisualCpp!'
+            }
+            if (toolChain in Gcc) {
+                println 'all toolchain is Gcc!'
+                linker.args '-static-libgcc', '-static-libstdc++', '-static'
+            }
+            if (toolChain in Clang) {
+                println 'all toolchain is Clang!'
+                linker.args '-lpthread'
+                if (flavor == flavors.staticrt) {
+                    linker.args '-static' //, '-lstdc++'
+                }
+                if (flavor == flavors.sanitizer) {
+                    cppCompiler.args '-O0', '-g', '-fsanitize=address', '-fno-omit-frame-pointer'
+                    linker.args '-g', '-fsanitize=address'
+                }
+                //cppCompiler.args '-iwithsysroot', 'D:/dev/utils/scoop/apps/gcc/current/lib/gcc/x86_64-w64-mingw32', '--target=x86_64-w64-mingw32'
+            }
+        }
+        // withType(SharedLibraryBinarySpec) { cppCompiler.define 'DLL_EXPORT' }
+    }
+
+    components {
+ 	clbjft(NativeLibrarySpec) {
+            targetPlatform 'x64'
+            sources {
+                cpp {
+                    source {
+                        srcDirs 'src/main/cpp/fastText/src'
+                        include "args.cc"
+                        include "dictionary.cc"
+                        include "fasttext.cc"
+                        include "matrix.cc"
+                        include "model.cc"
+                        include "productquantizer.cc"
+                        include "qmatrix.cc"
+                        include "utils.cc"
+                        include "vector.cc"
+                    }
+                    exportedHeaders {
+                        srcDirs 'src/main/cpp/fastText/src'
+                    }
+                }
+            }
+        }
+ 	test1(NativeExecutableSpec) {
+            targetPlatform 'x64'
+            sources {
+                cpp {
+                    source {
+                        srcDirs 'src/main/cpp/clb'
+                        include 'test.cpp'
+                    }
+                    lib library: 'clbjft', linkage: 'static'
+                }
+            }
+        }
+    }
+}
