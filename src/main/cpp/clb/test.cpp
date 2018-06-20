@@ -14,8 +14,9 @@ main(void)
     // fasttext::FastText ft;
     // ft.loadModel(std::string("m.mod"));
 
-    int *pI = new int;
-    *pI = 7;
+    // artificial memory leak
+    //int *pI = new int;
+    //*pI = 7;
 
     fta.getLabels();
 
@@ -44,7 +45,7 @@ main(void)
 
     fta.unloadModel();
 
-    std::wcout << L"done: " << *pI << std::endl;
+    std::wcout << L"done." << std::endl;
 
     return 0;
 }
