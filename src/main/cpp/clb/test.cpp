@@ -1,14 +1,18 @@
 #include <iostream>
 
-#include "fasttext.h"
+//#include "fasttext.h"
+#include "../fasttext_wrapper.h"
 
 int
 main(void)
 {
     std::wcout << L"start test..." << std::endl;
 
-    fasttext::FastText ft;
-    ft.loadModel(std::string("m.mod"));
+    FastTextWrapper::FastTextApi fta;
+    fta.loadModel(std::string("m.mod"));
+
+    // fasttext::FastText ft;
+    // ft.loadModel(std::string("m.mod"));
 
     int *pI = new int;
     *pI = 7;

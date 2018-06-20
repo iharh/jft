@@ -78,10 +78,9 @@ model {
             sources {
                 cpp {
                     source {
-                        srcDirs 'src/main/cpp/clb'
-                        include 'test.cpp'
                         srcDirs 'src/main/cpp'
                         include 'fasttext_wrapper.cc'
+                        include 'clb/test.cpp'
                     }
                     lib library: 'clbjft', linkage: 'static'
                 }
