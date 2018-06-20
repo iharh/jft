@@ -80,6 +80,8 @@ model {
                     source {
                         srcDirs 'src/main/cpp/clb'
                         include 'test.cpp'
+                        srcDirs 'src/main/cpp'
+                        include 'fasttext_wrapper.cc'
                     }
                     lib library: 'clbjft', linkage: 'static'
                 }
